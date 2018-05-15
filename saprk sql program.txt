@@ -1,0 +1,32 @@
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession.builder().appName("Spark SQL basic example").config("spark.some.config.option", "some-value").getOrCreate()
+import spark.implicits._
+val df = spark.read.json("examples/src/main/resources/employee.json")
+df.show()
+df.createOrReplaceTempView("employee")
+val sqlDF = spark.sql("SELECT * FROM employee")
+sqlDF.show()
+
+
+
+
+Explanation for above queries:
+
+
+1. We first import a Spark Session into Apache Spark.
+2. Creating a Spark Session ‘spark’ using the ‘builder()’ function.
+3. Importing the Implicts class into our ‘spark’ Session.
+4. We now create a DataFrame ‘df’ and import data from the ’employee.json’ file.
+5. Displaying the DataFrame ‘df’. The result is a table of 5 rows of ages and names from our ’employee.json’ file. 
+6. Creating a temporary view ’employee’ of our ‘df’ DataFrame.
+7. Perform a ‘select’ operation on our ’employee’ view to display the table into ‘sqlDF’.
+8. Displaying the results of ‘sqlDF’.
+
+
+You can use below statement to write the contents of dataframe in CSV format 
+
+sqlDF.write.csv("/data/home/csv")
+
+If you need to write the whole dataframe into a single CSV file, then use 
+
+sqlDF.coalesce(1).write.csv("/data/home/sample.csv")
